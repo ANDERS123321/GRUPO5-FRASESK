@@ -3,7 +3,7 @@ import requests
 
 app = Flask(__name__)
 
-HISTORY_FILE = "quotes_history.txt"
+HISTORY_FILE = "historial.txt"
 
 @app.route('/')
 def index():
@@ -15,4 +15,22 @@ def get_quote():
     data = response.json()
     quote = data.get("quote", "No quote found")
 
+# Creación del historial
+    with open(HISTORY_FILE, 'a') as file:
+        file.write(quote + '\n')
+
+    return jsonify({"quote": quote})
+
+@app.route('/history', methods=['GET'])
+def get_history():
+    try:
+        with open(HISTORY_FILE, 'r') as file:
+            quotes = file.readlines()
+        quotes = [q.strip() for q in quotes if q.strip()]
+        return jsonify({"history": quotes})
+    except FileNotFoundError:
+        return jsonify({"history": []})
+
+if __name__ == '_main_':
+    app.run(debug=True)
 
