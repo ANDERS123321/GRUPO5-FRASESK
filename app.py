@@ -1,9 +1,9 @@
 from flask import Flask, render_template, request, jsonify
 import requests
 
-app = Flask(__name__)
+app = Flask(__name__, template_folder='formato')
 
-HISTORY_FILE = "historial.txt"
+HISTORY_FILE = "history.txt"
 
 @app.route('/')
 def index():
